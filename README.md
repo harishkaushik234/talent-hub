@@ -77,7 +77,14 @@ cd frontend
 npm install
 npm run dev
 ```
- 
+
+Project show:
+
+ ![alt text](<Screenshot 2025-12-26 140527.png>)
+
+ ![alt text](<Screenshot 2025-12-26 140243.png>) 
+ ![alt text](<Screenshot 2025-12-26 140305.png>) 
+ ![alt text](<Screenshot 2025-12-26 140614.png>)
  
  
 
