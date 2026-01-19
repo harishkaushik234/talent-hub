@@ -13,23 +13,35 @@ import sessionRoutes from "./routes/sessionRoute.js";
 const app = express();
 
 /* =======================
-   CORS CONFIG (IMPORTANT)
+   CORS CONFIG (FINAL)
    ======================= */
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://talent-hub-harish.vercel.app"
-];
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // allow server-to-server, curl, postman, etc.
+      if (!origin) return callback(null, true);
 
-app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true
-}));
+      // allow localhost
+      if (origin === "http://localhost:5173") {
+        return callback(null, true);
+      }
+
+      // allow main vercel domain
+      if (origin === "https://talent-hub-harish.vercel.app") {
+        return callback(null, true);
+      }
+
+      // allow ALL vercel preview deployments
+      if (origin.endsWith(".vercel.app")) {
+        return callback(null, true);
+      }
+
+      // otherwise block
+      return callback(new Error("Not allowed by CORS"));
+    },
+    credentials: true,
+  })
+);
 
 /* =======================
    MIDDLEWARES
