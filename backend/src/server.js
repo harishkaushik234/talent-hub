@@ -12,11 +12,35 @@ import sessionRoutes from "./routes/sessionRoute.js";
 
 const app = express();
 
-// middleware
+/* =======================
+   CORS CONFIG (IMPORTANT)
+   ======================= */
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://talent-hub.vercel.app",
+  "https://talent-hub-harish.vercel.app"
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true
+}));
+
+/* =======================
+   MIDDLEWARES
+   ======================= */
 app.use(express.json());
-app.use(cors({ origin: ENV.CLIENT_URL, credentials: true }));
 app.use(clerkMiddleware());
 
+/* =======================
+   ROUTES
+   ======================= */
 app.use("/api/inngest", serve({ client: inngest, functions }));
 app.use("/api/chat", chatRoutes);
 app.use("/api/sessions", sessionRoutes);
@@ -25,12 +49,15 @@ app.get("/health", (req, res) => {
   res.status(200).json({ msg: "api is up and running" });
 });
 
+/* =======================
+   START SERVER
+   ======================= */
 const startServer = async () => {
   try {
     await connectDB();
-    app.listen(ENV.PORT, () =>
-      console.log("Server is running on port:", ENV.PORT)
-    );
+    app.listen(ENV.PORT, () => {
+      console.log("✅ Server is running on port:", ENV.PORT);
+    });
   } catch (error) {
     console.error("💥 Error starting the server", error);
   }
