@@ -17,7 +17,6 @@ const app = express();
    ======================= */
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://talent-hub.vercel.app",
   "https://talent-hub-harish.vercel.app"
 ];
 
